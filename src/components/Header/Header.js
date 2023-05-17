@@ -9,10 +9,12 @@ import { IoMdCart } from "react-icons/io";
 import { HiUserCircle } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 import SearchPopUp from "../searchPopUp/SearchPopUp";
+import UserPopUp from "../userPopUp/UserPopUp";
 
 const Header = () => {
   const [isMenu, setMenu] = useState(false);
   const [searchBar, setSearchBar] = useState(false);
+  const [isUserPopup, setUserPopup] = useState(false);
 
   return (
     <nav
@@ -52,7 +54,14 @@ const Header = () => {
               onClick={() => setSearchBar(!searchBar)}
             />
             <IoMdCart className="icon" />
-            <HiUserCircle className="icon" />
+            <HiUserCircle
+              className="icon"
+              onClick={() => setUserPopup(!isUserPopup)}
+            />
+
+            {isUserPopup ? (
+              <UserPopUp props={{ setUserPopup, setMenu }} />
+            ) : null}
           </div>
         </div>
 

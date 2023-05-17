@@ -1,0 +1,31 @@
+.userpop {
+  position: absolute;
+  width: 10rem;
+  height: 7rem;
+  background-color: white;
+  box-shadow: -1px 2px 5px rgb(10, 10, 10, 0.5);
+  border-radius: 5px;
+  right: 3rem;
+  top: 4rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: self-start;
+  flex-direction: column;
+  padding: 0 1rem;
+  z-index: 1111;
+}
+
+
+.userIcon{
+  font-family: playfair-display;
+  font-size: normal;
+  font-weight: bolder;
+}
+
+@media screen and (max-width: 850px) {
+  .userpop {
+       width: 10rem;
+    top: 7rem;
+    right: 0.9rem;
+  }
+}
