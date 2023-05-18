@@ -36,10 +36,10 @@ export const userLoginRequest = (userInfo) => {
   };
 };
 
-export const userLoginSuccess = (message) => {
+export const userLoginSuccess = (userInfo) => {
   return {
     type: USER_LOGIN_SUCCESS,
-    payload: message,
+    payload: userInfo,
   };
 };
 

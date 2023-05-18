@@ -1,10 +1,13 @@
-import React from 'react'
+import React from "react";
+import "./loading.css";
 
 const Loading = () => {
   return (
-    <div></div>
-    
-    )
-}
+    <div className="loadingPage">
+      <div className="inner"></div>
+      <div className="outer"></div>
+    </div>
+  );
+};
 
-export default Loading
+export default Loading;

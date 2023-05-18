@@ -1,0 +1,39 @@
+#error {
+  background-color: #f54949f3;
+  border-radius: 5px;
+}
+
+#message {
+  background-color: rgb(20, 180, 20);
+  border-radius: 5px;
+}
+
+.toaster {
+  width: 13rem;
+  height: 2.5rem;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1rem;
+  top: 5rem;
+  position: absolute;
+  right: 3rem;
+}
+
+.toaster > p {
+  margin: 0;
+}
+
+@media screen and (max-width: 850px) {
+  .toaster {
+    width: 80%;
+    height: 1.5rem;
+    top: 4rem;
+    left: 10vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}

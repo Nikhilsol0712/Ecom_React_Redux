@@ -1,9 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import "./registerScreen.css";
 import { PRIMARY_COLOR } from "../../utils/assets";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Toaster from "../../components/toaster/Toaster";
+import Loading from "../../components/loading/Loading";
+import { userAuthRegister } from "../../services/auth.service";
+import { userRegisterRequest, userRegisterSuccess, userRegisterFail } from "../../actions/auth.actions";
 
 const RegisterScreen = () => {
   const initialState = {
@@ -17,35 +22,69 @@ const RegisterScreen = () => {
     passwordError: "",
   };
   const [userData, setUserDate] = useState(initialState);
-  const [error, setError] = useState(initError);
-
+const [validationError, setValidationError] = useState(initError)
+const dispatch = useDispatch();
+const {loading, error, message}= useSelector((state)=>state.authReducer)
+const navigate = useNavigate()
   const handleChange = (e) => {
-    setError(initError);
+    setValidationError(initError);
     const { name, value } = e.target;
     setUserDate({ ...userData, [name]: value });
   };
 
-  const handleSignUp = (e) => {
+  const formValidation = (e) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,}$/;
     e.preventDefault();
     if (userData.name.trim().length < 2) {
-      setError({ nameError: "* name should not be empty" });
+      setValidationError({ nameError: "* name should not be empty" });
       return;
     } else if (!emailRegex.test(userData.email.trim())) {
-      setError({ emailError: "* invalid email" });
+      setValidationError({ emailError: "* invalid email" });
       return;
     } else if (!passRegex.test(userData.password.trim())) {
-      setError({ passwordError: "* atleast min 8char and alphanumeric" });
-      return;
+      setValidationError({ passwordError: "* atleast min 8char and alphanumeric" });
+      return false;
     }
-    console.log(userData);
+   return true
   };
 
+
+const handleSignUp = async(e)=>{
+  console.log(userData);
+  console.log(loading, "loading");
+
+  try{
+    if(!formValidation(e)){
+      return;
+    }
+    dispatch(userRegisterRequest());
+    const response = await userAuthRegister(userData);
+    console.log(response.data.code, "=========scode");
+    console.log(response, "response from auth.js")
+
+if(response.message == "successfully signup "){
+  response.data.password = undefined;
+  dispatch(userRegisterSuccess(response));
+  navigate('/signIn');
+}
+
+  }
+  catch(error){
+    dispatch(userRegisterFail("Email is already taken"));
+  }
+};
+console.log(loading, "laoding");
+
+
   return (
+
+<>
+{loading ? <Loading/> : null}
+{error || message ? <Toaster props={{error, message}} />: null}
     <div className="main_signUp_con">
       <form style={{ border: `solid ${PRIMARY_COLOR}` }}>
-        <h1>Logo</h1>
+        <h1>Register</h1>
 
         <div className="field">
           <label>Name</label>
@@ -59,7 +98,7 @@ const RegisterScreen = () => {
             }}
           />
           <p className="error" name="nameError">
-            {error.nameError}
+            {validationError.nameError}
           </p>
         </div>
         <div className="field">
@@ -74,7 +113,7 @@ const RegisterScreen = () => {
             }}
           />
           <p className="error" name="emailError">
-            {error.emailError}
+            {validationError.emailError}
           </p>
         </div>
 
@@ -89,19 +128,20 @@ const RegisterScreen = () => {
               setValue: handleChange,
             }}
           />
-          <p className="error">{error.passwordError}</p>
+          <p className="error">{validationError.passwordError}</p>
         </div>
 
         <Button props={{ name: "signUp", handleClick: handleSignUp }} />
         <p className="swithchLogin">
           <NavLink className="navLink" to="/signIn">
-            alrady have an account?login
+            alrady have an account? <button>login</button> 
           </NavLink>
         </p>
 
         {/* <button></button> */}
       </form>
     </div>
+    </>
   );
 };
 
